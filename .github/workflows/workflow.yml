@@ -13,7 +13,9 @@ jobs:
   test:
     runs-on: self-hosted
     steps:
-      - run: echo "Todo -> Run tests"
+      - uses: Astemes/astemes-github-actions/runLUnit@main
+        with:
+          config-path: "source\\project.lvproj"
 
   build:
     runs-on: self-hosted
