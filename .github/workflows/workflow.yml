@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: Astemes/astemes-github-actions/runLUnit@main
         with:
-          config-path: "source\\project.lvproj"
+          project-path: "source\\project.lvproj"
 
   build:
     runs-on: self-hosted
