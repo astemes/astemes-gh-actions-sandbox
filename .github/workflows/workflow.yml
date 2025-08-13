@@ -18,11 +18,11 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
-      - uses: Astemes/astemes-github-actions/buildLVBuildSpec@main
+      - uses: Astemes/astemes-github-actions/buildLVBuildSpec.yml@main
         with:
           project-path: "source\\project.lvproj"
           build-spec: "Application"
-      - uses: Astemes/astemes-github-actions/buildLVBuildSpec@main
+      - uses: Astemes/astemes-github-actions/buildLVBuildSpec.yml@main
         with:
           project-path: "source\\project.lvproj"
           build-spec: "Package"
