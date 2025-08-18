@@ -41,23 +41,7 @@ jobs:
         run: echo "Using version ${{ steps.get_version.outputs.version }}
 
 
-  docs:
-    needs: checkout
-    runs-on: self-hosted
-    steps:
-      - name: Build MKDocs
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: ./.github/actions/astemes-github-actions/buildDocs
-        with:
-            project-title: "Docs Sandbox"
-            author: "Anton Sundqvist"
-            initial-release: "2025"
-      - name: Deploy GHPages
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          python -m mkdocs gh-deploy --force
-        shell: powershell
+
        
 
   # test:
@@ -83,3 +67,20 @@ jobs:
   #       with:
   #         project-path: "source\\project.lvproj"
   #         build-spec: "Package"
+  # docs:
+  # needs: checkout
+  # runs-on: self-hosted
+  # steps:
+  #   - name: Build MKDocs
+  #     if: startsWith(github.ref, 'refs/tags/')
+  #     uses: ./.github/actions/astemes-github-actions/buildDocs
+  #     with:
+  #         project-title: "Docs Sandbox"
+  #         author: "Anton Sundqvist"
+  #         initial-release: "2025"
+  #   - name: Deploy GHPages
+  #     if: startsWith(github.ref, 'refs/tags/')
+  #     run: |
+  #       git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+  #       python -m mkdocs gh-deploy --force
+  #     shell: powershell
