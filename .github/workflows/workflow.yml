@@ -31,7 +31,8 @@ jobs:
       ref: ${{ github.ref }}
   print-version:
     needs: get-version
-    run: echo "Using version ${{ needs.get-version.outputs.version }}"
+    steps:
+      - run: echo "Using version ${{ needs.get-version.outputs.version }}"
   docs:
     needs: checkout
     runs-on: self-hosted
