@@ -25,7 +25,7 @@ jobs:
           ref: main
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions/astemes-github-actions
-      - name: Get version:
+      - name: Get version
         name: Extract version from tag
         if: startsWith(github.ref, 'refs/tags/')
         id: get_version
