@@ -26,8 +26,16 @@ jobs:
           ref: main
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions/astemes-github-actions
-      - name: Extract version from tag
-        if: startsWith(github.ref, 'refs/tags/')
+      # - name: Extract version from tag
+      #   if: startsWith(github.ref, 'refs/tags/')
+      #   id: get_version
+      #   shell: powershell
+      #   run: |
+      #     $version = $env:GITHUB_REF -replace '^refs/tags/v',''
+      #     echo "Version is $version"
+      #     "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      
+      - name: Get version
         id: get_version
         shell: powershell
         run: |
