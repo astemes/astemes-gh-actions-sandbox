@@ -5,28 +5,36 @@ jobs:
   checkout:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: 'recursive'
           token: ${{ secrets.GH_PAT }}
-  # test:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - uses: Astemes/astemes-github-actions/runLUnit@main
-  #       with:
-  #         project-path: "source\\project.lvproj"
-  build-exe:
-    runs-on: self-hosted
-    steps:
-      - name: Generate GitHub App token
+      - name: Generate Token
         id: app-token
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          owner: astemes
-      - uses: Astemes/astemes-github-actions/buildLVBuildSpec@main
+            app-id: ${{ secrets.APP_ID }}
+            private-key: ${{ secrets.APP_PRIVATE_KEY }}
+            owner: astemes
+      - name: Checkout Tools
+        uses: actions/checkout@v4
+        with:
+          repository: astemes/astemes-github-actions
+          ref: main
+          token: ${{ steps.app-token.outputs.token }}
+          path: ./.github/actions/astemes-github-actions
+  test:
+    runs-on: self-hosted
+    steps:
+      - uses: ./.github/actions/astemes-github-actions/runLUnit
+        with:
+          project-path: "source\\project.lvproj"
+  build-exe:
+    runs-on: self-hosted
+    steps:
+      - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
         with:
           token: ${{ steps.app-token.outputs.token }}
           project-path: "source\\project.lvproj"
@@ -41,7 +49,7 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: astemes
-      - uses: Astemes/astemes-github-actions/buildLVBuildSpec@main
+      - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
         with:
           token: ${{ steps.app-token.outputs.token }}
           project-path: "source\\project.lvproj"
