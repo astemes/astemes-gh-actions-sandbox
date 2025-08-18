@@ -25,26 +25,36 @@ jobs:
           ref: main
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions/astemes-github-actions
-  test:
-    needs: checkout
+  docs:
     runs-on: self-hosted
     steps:
-      - uses: ./.github/actions/astemes-github-actions/runLUnit
+      - name: Build MKDocs
+        uses: ./.github/actions/astemes-github-actions/buildDocs
         with:
-          project-path: "source\\project.lvproj"
-  build-exe:
-    needs: test
-    runs-on: self-hosted
-    steps:
-      - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
-        with:
-          project-path: "source\\project.lvproj"
-          build-spec: "Application"
-  build-pkg:
-    needs: build-exe
-    runs-on: self-hosted
-    steps:
-      - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
-        with:
-          project-path: "source\\project.lvproj"
-          build-spec: "Package"
+            project-title: "Astemes LUnit"
+            author: "Anton Sundqvist"
+            initial-release: "2021"
+
+  # test:
+  #   needs: checkout
+  #   runs-on: self-hosted
+  #   steps:
+  #     - uses: ./.github/actions/astemes-github-actions/runLUnit
+  #       with:
+  #         project-path: "source\\project.lvproj"
+  # build-exe:
+  #   needs: test
+  #   runs-on: self-hosted
+  #   steps:
+  #     - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
+  #       with:
+  #         project-path: "source\\project.lvproj"
+  #         build-spec: "Application"
+  # build-pkg:
+  #   needs: build-exe
+  #   runs-on: self-hosted
+  #   steps:
+  #     - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
+  #       with:
+  #         project-path: "source\\project.lvproj"
+  #         build-spec: "Package"
