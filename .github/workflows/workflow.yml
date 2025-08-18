@@ -35,34 +35,34 @@ jobs:
           "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Print version
         run: echo "Using version ${{ steps.get_version.outputs.version }}"
-    docs:
-      steps:
-      - run: python -m venv .venv
-        shell: powershell
-      - run: .venv\scripts\activate
-        shell: powershell
-      - run: python -m pip install -r ".github\actions\astemes-github-actions\mkdocs_builder\requirements.txt"
-        shell: powershell
-      - run: |
-          python `
-            ./.github/actions/astemes-github-actions/mkdocs_builder/mkdocs_builder.py `
-            --docs_path "$env:GITHUB_WORKSPACE\docs" `
-            --site_name "Sandbox" `
-            --repo_url "$env:GITHUB_SERVER_URL/$env.GITHUB_REPOSITORY" `
-            --author "Anton Sundqvist" `
-            --initial_release "2025"
-        shell: powershell
-      - run: python -m mkdocs build
-        shell: powershell
-      - name: Configure Git
-        run: |
-          git config --global user.email "actions@github.com" `
-          git config --global user.name "GitHub Actions" `
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-        shell: powershell
-      - name: deploy GH Pages
-        run: python -m mkdocs gh-deploy --force
-        shell: powershell
+  docs:
+    steps:
+    - run: python -m venv .venv
+      shell: powershell
+    - run: .venv\scripts\activate
+      shell: powershell
+    - run: python -m pip install -r ".github\actions\astemes-github-actions\mkdocs_builder\requirements.txt"
+      shell: powershell
+    - run: |
+        python `
+          ./.github/actions/astemes-github-actions/mkdocs_builder/mkdocs_builder.py `
+          --docs_path "$env:GITHUB_WORKSPACE\docs" `
+          --site_name "Sandbox" `
+          --repo_url "$env:GITHUB_SERVER_URL/$env.GITHUB_REPOSITORY" `
+          --author "Anton Sundqvist" `
+          --initial_release "2025"
+      shell: powershell
+    - run: python -m mkdocs build
+      shell: powershell
+    - name: Configure Git
+      run: |
+        git config --global user.email "actions@github.com" `
+        git config --global user.name "GitHub Actions" `
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+      shell: powershell
+    - name: deploy GH Pages
+      run: python -m mkdocs gh-deploy --force
+      shell: powershell
 
   # docs:
   #   needs: checkout
