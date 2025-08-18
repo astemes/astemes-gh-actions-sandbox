@@ -32,7 +32,7 @@ jobs:
         run: |
           $version = $env:GITHUB_REF -replace '^refs/tags/v',''
           echo "Version is $version"
-          echo "version=$version >> $GITHUB_OUTPUT"
+          echo "version=$version" >> $GITHUB_OUTPUT
       - name: Print version
         run: echo "Using version ${{ steps.get_version.outputs.version }}"
   docs:
