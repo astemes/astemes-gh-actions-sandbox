@@ -7,12 +7,12 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Generate Token
-          id: app-token
-          uses: actions/create-github-app-token@v1
-          with:
-              app-id: ${{ secrets.APP_ID }}
-              private-key: ${{ secrets.APP_PRIVATE_KEY }}
-              owner: astemes
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+            app-id: ${{ secrets.APP_ID }}
+            private-key: ${{ secrets.APP_PRIVATE_KEY }}
+            owner: astemes
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
