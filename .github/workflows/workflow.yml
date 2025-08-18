@@ -25,16 +25,16 @@ jobs:
           ref: main
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions/astemes-github-actions
-  get-version:
-    runs-on: self-hosted
-    uses: ./.github/actions/astemes-github-actions/getVersion
-    with:
-      ref: ${{ github.ref }}
-  print-version:
-    runs-on: self-hosted
-    needs: get-version
-    steps:
-      - run: echo "Using version ${{ needs.get-version.outputs.version }}"
+      - name: Get tag version
+        id: tag_version
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: powershell
+        run: |
+          $version = $env:GITHUB_REF -replace '^refs/tags/v',''
+          Write-Host "Version is $version"
+          Write-Output "##[set-output name=version]$version"
+      - name: print version
+        run: echo "Using version ${{ steps.tag_version.outputs.version }}"
   docs:
     needs: checkout
     runs-on: self-hosted
