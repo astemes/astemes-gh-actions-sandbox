@@ -38,22 +38,13 @@ jobs:
     steps:
       - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
         with:
-          token: ${{ steps.app-token.outputs.token }}
           project-path: "source\\project.lvproj"
           build-spec: "Application"
   build-pkg:
     needs: build-exe
     runs-on: self-hosted
     steps:
-      - name: Generate GitHub App token
-        id: app-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          owner: astemes
       - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
         with:
-          token: ${{ steps.app-token.outputs.token }}
           project-path: "source\\project.lvproj"
           build-spec: "Package"
