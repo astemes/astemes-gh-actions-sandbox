@@ -6,19 +6,19 @@ jobs:
   checkout:
     runs-on: self-hosted
     steps:
+      - name: Generate Token
+          id: app-token
+          uses: actions/create-github-app-token@v1
+          with:
+              app-id: ${{ secrets.APP_ID }}
+              private-key: ${{ secrets.APP_PRIVATE_KEY }}
+              owner: astemes
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: 'recursive'
-          token: ${{ secrets.GH_PAT }}
-      - name: Generate Token
-        id: app-token
-        uses: actions/create-github-app-token@v1
-        with:
-            app-id: ${{ secrets.APP_ID }}
-            private-key: ${{ secrets.APP_PRIVATE_KEY }}
-            owner: astemes
+          token: ${{ steps.app-token.outputs.token }}
       - name: Checkout Tools
         uses: actions/checkout@v4
         with:
@@ -36,35 +36,6 @@ jobs:
           "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Print version
         run: echo "Using version ${{ steps.get_version.outputs.version }}"
-  # docs:
-  #   runs-on: self-hosted
-  #   steps:
-  #   - run: python -m venv .venv
-  #     shell: powershell
-  #   - run: .venv\scripts\activate
-  #     shell: powershell
-  #   - run: python -m pip install -r ".github\actions\astemes-github-actions\mkdocs_builder\requirements.txt"
-  #     shell: powershell
-  #   - run: |
-  #       python `
-  #         ./.github/actions/astemes-github-actions/mkdocs_builder/mkdocs_builder.py `
-  #         --docs_path "$env:GITHUB_WORKSPACE\docs" `
-  #         --site_name "Sandbox" `
-  #         --repo_url "$env:GITHUB_SERVER_URL/$env.GITHUB_REPOSITORY" `
-  #         --author "Anton Sundqvist" `
-  #         --initial_release "2025"
-  #     shell: powershell
-  #   - run: python -m mkdocs build
-  #     shell: powershell
-  #   - name: Configure Git
-  #     run: |
-  #       git config --global user.email "actions@github.com"
-  #       git config --global user.name "GitHub Actions"
-  #       git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-  #     shell: powershell
-  #   - name: deploy GH Pages
-  #     run: python -m mkdocs gh-deploy --force
-  #     shell: powershell
 
   docs:
     needs: checkout
