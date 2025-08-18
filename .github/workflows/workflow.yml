@@ -1,6 +1,7 @@
 name: Test Runner
 on: [push]
-
+permissions:
+  contents: write
 jobs:
   checkout:
     runs-on: self-hosted
