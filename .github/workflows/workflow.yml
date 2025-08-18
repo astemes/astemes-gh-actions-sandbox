@@ -5,13 +5,6 @@ jobs:
   checkout:
     runs-on: self-hosted
     steps:
-      - name: Generate GitHub App token
-        id: app-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          owner: astemes
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -26,6 +19,13 @@ jobs:
   build-exe:
     runs-on: self-hosted
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: astemes
       - uses: Astemes/astemes-github-actions/buildLVBuildSpec@main
         with:
           token: ${{ steps.app-token.outputs.token }}
@@ -34,6 +34,13 @@ jobs:
   build-pkg:
     runs-on: self-hosted
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: astemes
       - uses: Astemes/astemes-github-actions/buildLVBuildSpec@main
         with:
           token: ${{ steps.app-token.outputs.token }}
