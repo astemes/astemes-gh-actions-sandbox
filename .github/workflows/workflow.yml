@@ -26,6 +26,7 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions/astemes-github-actions
   docs:
+    needs: checkout
     runs-on: self-hosted
     steps:
       - name: Build MKDocs
