@@ -26,12 +26,14 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions/astemes-github-actions
   test:
+    needs: checkout
     runs-on: self-hosted
     steps:
       - uses: ./.github/actions/astemes-github-actions/runLUnit
         with:
           project-path: "source\\project.lvproj"
   build-exe:
+    needs: test
     runs-on: self-hosted
     steps:
       - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
@@ -40,6 +42,7 @@ jobs:
           project-path: "source\\project.lvproj"
           build-spec: "Application"
   build-pkg:
+    needs: build-exe
     runs-on: self-hosted
     steps:
       - name: Generate GitHub App token
