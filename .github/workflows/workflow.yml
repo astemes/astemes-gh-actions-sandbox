@@ -26,10 +26,12 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions/astemes-github-actions
   get-version:
+    runs-on: self-hosted
     uses: ./.github/actions/astemes-github-actions/getVersion
     with:
       ref: ${{ github.ref }}
   print-version:
+    runs-on: self-hosted
     needs: get-version
     steps:
       - run: echo "Using version ${{ needs.get-version.outputs.version }}"
