@@ -34,16 +34,12 @@ jobs:
       #     $version = $env:GITHUB_REF -replace '^refs/tags/v',''
       #     echo "Version is $version"
       #     "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-      
       - name: Get version
         id: get_version
-        shell: powershell
-        run: |
-          $version = $env:GITHUB_REF -replace '^refs/tags/v',''
-          echo "Version is $version"
-          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        uses: ./.github/actions/astemes-github-actions/getVersion
       - name: Print version
-        run: echo "Using version ${{ steps.get_version.outputs.version }}"
+        run: echo "Using version ${{ steps.get_version.outputs.version }}
+
 
   docs:
     needs: checkout
