@@ -79,7 +79,9 @@ jobs:
             initial-release: "2025"
       - name: Deploy GHPages
         if: startsWith(github.ref, 'refs/tags/')
-        run: python -m mkdocs gh-deploy --force
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          python -m mkdocs gh-deploy --force
         shell: powershell
        
 
