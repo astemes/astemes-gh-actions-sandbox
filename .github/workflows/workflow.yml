@@ -16,10 +16,17 @@ jobs:
   #     - uses: Astemes/astemes-github-actions/runLUnit@main
   #       with:
   #         project-path: "source\\project.lvproj"
-  build:
+  build exe:
     runs-on: self-hosted
     steps:
       - uses: Astemes/astemes-github-actions/buildLVBuildSpec@main
         with:
           project-path: "source\\project.lvproj"
           build-spec: "Application"
+  build pkg:
+    runs-on: self-hosted
+    steps:
+      - uses: Astemes/astemes-github-actions/buildLVBuildSpec@main
+        with:
+          project-path: "source\\project.lvproj"
+          build-spec: "Package"
