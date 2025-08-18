@@ -25,13 +25,13 @@ jobs:
           ref: main
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions/astemes-github-actions
-      - name: Get version from tag
-        id: version
+      - name: Print tag and extract version
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: powershell
         run: |
-          echo "Tag is $GITHUB_REF"
-          VERSION="${GITHUB_REF#refs/tags/v}"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "::set-output name=ver::$VERSION"
+          Write-Host "Tag is $env:GITHUB_REF"
+          $version = $env:GITHUB_REF -replace '^refs/tags/v',''
+          Write-Host "Version is $version"
   docs:
     needs: checkout
     runs-on: self-hosted
