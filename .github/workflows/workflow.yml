@@ -25,7 +25,7 @@ jobs:
           repository: astemes/astemes-github-actions
           ref: main
           token: ${{ steps.app-token.outputs.token }}
-          path: ./.github/actions/astemes-github-actions
+          path: ./.github/actions
       # - name: Extract version from tag
       #   if: startsWith(github.ref, 'refs/tags/')
       #   id: get_version
@@ -36,7 +36,7 @@ jobs:
       #     "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Get version
         id: get_version
-        uses: ./.github/actions/astemes-github-actions/getVersion
+        uses: ./.github/actions/getVersion
         with:
           tag: ${{ github.ref_name }}
       - name: Print version
