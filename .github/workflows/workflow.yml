@@ -31,6 +31,10 @@ jobs:
         uses: ./.github/actions/getVersion
       - name: Print version
         run: echo "Using version ${{ steps.get_version.outputs.version }}"
+      - name: Clear Mutation history
+        uses: ./.github/actions/clearMutationHistory
+        with:
+          directory: "source"
 
 
 
