@@ -42,13 +42,13 @@ jobs:
         with:
           project-path: "source\\project.lvproj"
   build-exe:
-      needs: test
-      runs-on: self-hosted
-      steps:
-        - uses: ./.github/actions/buildLVBuildSpec
-          with:
-            project-path: "source\\project.lvproj"
-            build-spec: "Application"
+    needs: test
+    runs-on: self-hosted
+    steps:
+      - uses: ./.github/actions/buildLVBuildSpec
+        with:
+          project-path: "source\\project.lvproj"
+          build-spec: "Application"
   build-vip:
     needs: build-exe
     runs-on: self-hosted
@@ -61,7 +61,7 @@ jobs:
         with:
           vipb-path: "source\\vipm.vipb"
           lv-version: "20.0"
-          pkg-version: "${{ steps.get_version.outputs.version }}""
+          pkg-version: "${{ steps.get_version.outputs.version }}"
 
 
 
