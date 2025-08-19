@@ -26,19 +26,9 @@ jobs:
           ref: main
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions
-      # - name: Extract version from tag
-      #   if: startsWith(github.ref, 'refs/tags/')
-      #   id: get_version
-      #   shell: powershell
-      #   run: |
-      #     $version = $env:GITHUB_REF -replace '^refs/tags/v',''
-      #     echo "Version is $version"
-      #     "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Get version
         id: get_version
         uses: ./.github/actions/getVersion
-        with:
-          tag: ${{ github.ref_name }}
       - name: Print version
         run: echo "Using version ${{ steps.get_version.outputs.version }}"
 
@@ -50,14 +40,14 @@ jobs:
   #   needs: checkout
   #   runs-on: self-hosted
   #   steps:
-  #     - uses: ./.github/actions/astemes-github-actions/runLUnit
+  #     - uses: ./.github/actions/runLUnit
   #       with:
   #         project-path: "source\\project.lvproj"
   # build-exe:
   #   needs: test
   #   runs-on: self-hosted
   #   steps:
-  #     - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
+  #     - uses: ./.github/actions/buildLVBuildSpec
   #       with:
   #         project-path: "source\\project.lvproj"
   #         build-spec: "Application"
@@ -65,7 +55,7 @@ jobs:
   #   needs: build-exe
   #   runs-on: self-hosted
   #   steps:
-  #     - uses: ./.github/actions/astemes-github-actions/buildLVBuildSpec
+  #     - uses: ./.github/actions/buildLVBuildSpec
   #       with:
   #         project-path: "source\\project.lvproj"
   #         build-spec: "Package"
@@ -75,7 +65,7 @@ jobs:
   # steps:
   #   - name: Build MKDocs
   #     if: startsWith(github.ref, 'refs/tags/')
-  #     uses: ./.github/actions/astemes-github-actions/buildDocs
+  #     uses: ./.github/actions/buildDocs
   #     with:
   #         project-title: "Docs Sandbox"
   #         author: "Anton Sundqvist"
