@@ -40,7 +40,7 @@ jobs:
         with:
           tag: ${{ github.ref_name }}
       - name: Print version
-        run: echo "Using version ${{ steps.get_version.outputs.version }}
+        run: echo "Using version ${{ steps.get_version.outputs.version }}"
 
 
 
