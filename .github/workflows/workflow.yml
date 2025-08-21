@@ -52,26 +52,30 @@ jobs:
   build-vip:
     needs: build-exe
     runs-on: self-hosted
+    outputs:
+      vip-path: ${{ steps.build-vip-step.outputs.vip-path }}
     steps:
       - name: Get version
         id: get_version
         uses: ./.github/actions/getVersion
       - name: Build VIP
+        id: build-vip-step
         uses: ./.github/actions/buildVIPackage
         with:
           vipb-path: "source\\vipm.vipb"
           lv-version: "20.0"
           pkg-version: "${{ steps.get_version.outputs.version }}"
+
   release-vip:
     needs: build-vip
     runs-on: self-hosted
     steps:
-      - run: 'echo "${{ steps.build-vip.outputs.vip-path }}"'
+      - run: 'echo "${{ needs.build-vip.outputs.vip-path }}"'
         shell: powershell
       - name: Release VIP
         uses: ./.github/actions/releaseFile
         with:
-          file-path: "${{ steps.build-vip.outputs.vip-path }}"
+          file-path: "${{ needs.build-vip.outputs.vip-path }}"
 
 
 
