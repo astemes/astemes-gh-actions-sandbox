@@ -62,14 +62,14 @@ jobs:
           vipb-path: "source\\vipm.vipb"
           lv-version: "20.0"
           pkg-version: "${{ steps.get_version.outputs.version }}"
-    release-vip:
-      needs: build-vip
-      runs-on: self-hosted
-      steps:
-      - name: Release VIP
-        uses: ./.github/actions/releaseFile
-        with:
-          file-path: "${{ steps.build-vip.outputs.vip-file }}"
+  release-vip:
+    needs: build-vip
+    runs-on: self-hosted
+    steps:
+    - name: Release VIP
+      uses: ./.github/actions/releaseFile
+      with:
+        file-path: "${{ steps.build-vip.outputs.vip-file }}"
 
 
 
