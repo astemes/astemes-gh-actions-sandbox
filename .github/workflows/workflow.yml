@@ -66,6 +66,8 @@ jobs:
     needs: build-vip
     runs-on: self-hosted
     steps:
+    - run: 'echo "${{ steps.build-vip.outputs.vip-file }}"'
+      shell: powershell
     - name: Release VIP
       uses: ./.github/actions/releaseFile
       with:
