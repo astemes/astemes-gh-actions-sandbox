@@ -79,7 +79,7 @@ jobs:
         with:
           file-path: "${{ needs.build-pkg.outputs.nipkg-path }}"
   build-vip:
-    needs: build-exe
+    needs: release-nipkg
     runs-on: self-hosted
     outputs:
       vip-path: ${{ steps.build-vip.outputs.vip-path }}
