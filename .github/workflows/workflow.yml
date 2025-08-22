@@ -83,11 +83,14 @@ jobs:
   build-pkg:
     needs: build-exe
     runs-on: self-hosted
+    outputs:
+      nipkg-path: ${{ steps.build-nipkg-step.outputs.nipkg-path }}
     steps:
       - name: Get version
         id: get_version
         uses: ./.github/actions/getVersion
       - uses: ./.github/actions/buildLVBuildSpecGCLI
+        id: build-nipkg
         with:
           project-path: "source\\project.lvproj"
           build-spec: "Package"
