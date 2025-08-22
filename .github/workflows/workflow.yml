@@ -46,11 +46,15 @@ jobs:
     needs: checkout
     runs-on: self-hosted
     steps:
+      - name: Get version
+        id: get_version
+        uses: ./.github/actions/getVersion
       - name: Build LabVIEW Build Specificaiton
         uses: ./.github/actions/buildLVBuildSpecGCLI
         with:
           project-path: "source\\project.lvproj"
           build-spec: "Application"
+          version: "${{ steps.get_version.outputs.version }}"
   # build-vip:
   #   needs: build-exe
   #   runs-on: self-hosted
