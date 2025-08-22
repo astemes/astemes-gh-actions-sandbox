@@ -26,13 +26,17 @@ jobs:
           ref: main
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions
-  clear-mutation-history:
-    needs: checkout
-    runs-on: self-hosted
-    steps:
+  # clear-mutation-history:
+  #   needs: checkout
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Clear Mutation history
+  #       uses: ./.github/actions/clearMutationHistory
+  #       with:
+  #         directory: "source"
 
   test:
-    needs: clear-mutation-history
+    needs: checkout
     runs-on: self-hosted
     steps:
       - uses: ./.github/actions/runLUnitGCLI
@@ -42,10 +46,6 @@ jobs:
   #   needs: checkout
   #   runs-on: self-hosted
   #   steps:
-  #     - name: Clear Mutation history
-  #       uses: ./.github/actions/clearMutationHistory
-  #       with:
-  #         directory: "source"
   #     - name: Build LabVIEW Build Specificaiton
   #       uses: ./.github/actions/buildLVBuildSpec
   #       with:
