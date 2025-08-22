@@ -35,22 +35,22 @@ jobs:
   #       with:
   #         directory: "source"
 
-  test:
-    needs: checkout
-    runs-on: self-hosted
-    steps:
-      - uses: ./.github/actions/runLUnitGCLI
-        with:
-          project-path: "source\\project.lvproj"
-  # build-exe:
+  # test:
   #   needs: checkout
   #   runs-on: self-hosted
   #   steps:
-  #     - name: Build LabVIEW Build Specificaiton
-  #       uses: ./.github/actions/buildLVBuildSpec
+  #     - uses: ./.github/actions/runLUnitGCLI
   #       with:
   #         project-path: "source\\project.lvproj"
-  #         build-spec: "Application"
+  build-exe:
+    needs: checkout
+    runs-on: self-hosted
+    steps:
+      - name: Build LabVIEW Build Specificaiton
+        uses: ./.github/actions/buildLVBuildSpecGCLI
+        with:
+          project-path: "source\\project.lvproj"
+          build-spec: "Application"
   # build-vip:
   #   needs: build-exe
   #   runs-on: self-hosted
