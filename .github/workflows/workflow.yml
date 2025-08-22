@@ -55,21 +55,21 @@ jobs:
           project-path: "source\\project.lvproj"
           build-spec: "Application"
           version: "${{ steps.get_version.outputs.version }}"
-  build-vip:
-    needs: build-exe
-    runs-on: self-hosted
-    outputs:
-      vip-path: ${{ steps.build-vip-step.outputs.vip-path }}
-    steps:
-      - name: Get version
-        id: get_version
-        uses: ./.github/actions/getVersion
-      - name: Build VIP
-        id: build-vip-step
-        uses: ./.github/actions/buildVIPackageGCLI
-        with:
-          vipb-path: "source\\vipm.vipb"
-          pkg-version: "${{ steps.get_version.outputs.version }}"
+  # build-vip:
+  #   needs: build-exe
+  #   runs-on: self-hosted
+  #   outputs:
+  #     vip-path: ${{ steps.build-vip-step.outputs.vip-path }}
+  #   steps:
+  #     - name: Get version
+  #       id: get_version
+  #       uses: ./.github/actions/getVersion
+  #     - name: Build VIP
+  #       id: build-vip-step
+  #       uses: ./.github/actions/buildVIPackageGCLI
+  #       with:
+  #         vipb-path: "source\\vipm.vipb"
+  #         pkg-version: "${{ steps.get_version.outputs.version }}"
   # release-vip:
   #   needs: build-vip
   #   runs-on: self-hosted
@@ -80,14 +80,27 @@ jobs:
   #       uses: ./.github/actions/releaseFile
   #       with:
   #         file-path: "${{ needs.build-vip.outputs.vip-path }}"
-  # build-pkg:
-  #   needs: build-exe
-  #   runs-on: self-hosted
-  #   steps:
-  #     - uses: ./.github/actions/buildLVBuildSpec
-  #       with:
-  #         project-path: "source\\project.lvproj"
-  #         build-spec: "Package"
+  build-pkg:
+    needs: build-exe
+    runs-on: self-hosted
+    steps:
+      - name: Get version
+        id: get_version
+        uses: ./.github/actions/getVersion
+      - uses: ./.github/actions/buildLVBuildSpecGCLI
+        with:
+          project-path: "source\\project.lvproj"
+          build-spec: "Package"
+          version: "${{ steps.get_version.outputs.version }}"
+  release-nipkg:
+    needs: build-pkg
+    runs-on: self-hosted
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Release nipkg
+        uses: ./.github/actions/releaseFile
+        with:
+          file-path: "${{ needs.build-pkg.outputs.nipkg-path }}"
   # docs:
   # needs: checkout
   # runs-on: self-hosted
