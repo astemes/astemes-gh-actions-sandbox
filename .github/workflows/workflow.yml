@@ -55,36 +55,11 @@ jobs:
           project-path: "source\\project.lvproj"
           build-spec: "Application"
           version: "${{ steps.get_version.outputs.version }}"
-  # build-vip:
-  #   needs: build-exe
-  #   runs-on: self-hosted
-  #   outputs:
-  #     vip-path: ${{ steps.build-vip-step.outputs.vip-path }}
-  #   steps:
-  #     - name: Get version
-  #       id: get_version
-  #       uses: ./.github/actions/getVersion
-  #     - name: Build VIP
-  #       id: build-vip-step
-  #       uses: ./.github/actions/buildVIPackageGCLI
-  #       with:
-  #         vipb-path: "source\\vipm.vipb"
-  #         pkg-version: "${{ steps.get_version.outputs.version }}"
-  # release-vip:
-  #   needs: build-vip
-  #   runs-on: self-hosted
-  #   steps:
-  #     - run: 'echo "${{ needs.build-vip.outputs.vip-path }}"'
-  #       shell: powershell
-  #     - name: Release VIP
-  #       uses: ./.github/actions/releaseFile
-  #       with:
-  #         file-path: "${{ needs.build-vip.outputs.vip-path }}"
   build-pkg:
     needs: build-exe
     runs-on: self-hosted
     outputs:
-      nipkg-path: ${{ steps.build-nipkg-step.outputs.nipkg-path }}
+      nipkg-path: ${{ steps.build-nipkg.outputs.nipkg-path }}
     steps:
       - name: Get version
         id: get_version
@@ -104,6 +79,31 @@ jobs:
         uses: ./.github/actions/releaseFile
         with:
           file-path: "${{ needs.build-pkg.outputs.nipkg-path }}"
+  # build-vip:
+  #   needs: build-exe
+  #   runs-on: self-hosted
+  #   outputs:
+  #     vip-path: ${{ steps.build-vip.outputs.vip-path }}
+  #   steps:
+  #     - name: Get version
+  #       id: get_version
+  #       uses: ./.github/actions/getVersion
+  #     - name: Build VIP
+  #       id: build-vip
+  #       uses: ./.github/actions/buildVIPackageGCLI
+  #       with:
+  #         vipb-path: "source\\vipm.vipb"
+  #         pkg-version: "${{ steps.get_version.outputs.version }}"
+  # release-vip:
+  #   needs: build-vip
+  #   runs-on: self-hosted
+  #   steps:
+  #     - run: 'echo "${{ needs.build-vip.outputs.vip-path }}"'
+  #       shell: powershell
+  #     - name: Release VIP
+  #       uses: ./.github/actions/releaseFile
+  #       with:
+  #         file-path: "${{ needs.build-vip.outputs.vip-path }}"
   # docs:
   # needs: checkout
   # runs-on: self-hosted
