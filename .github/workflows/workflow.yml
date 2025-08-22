@@ -1,4 +1,4 @@
-name: Test Runner
+name: Demo Workflow
 on: [push]
 permissions:
   contents: write
@@ -26,24 +26,23 @@ jobs:
           ref: main
           token: ${{ steps.app-token.outputs.token }}
           path: ./.github/actions
-  # clear-mutation-history:
-  #   needs: checkout
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Clear Mutation history
-  #       uses: ./.github/actions/clearMutationHistory
-  #       with:
-  #         directory: "source"
-
-  # test:
-  #   needs: checkout
-  #   runs-on: self-hosted
-  #   steps:
-  #     - uses: ./.github/actions/runLUnitGCLI
-  #       with:
-  #         project-path: "source\\project.lvproj"
-  build-exe:
+  clear-mutation-history:
     needs: checkout
+    runs-on: self-hosted
+    steps:
+      - name: Clear Mutation history
+        uses: ./.github/actions/clearMutationHistory
+        with:
+          directory: "source"
+  test:
+    needs: clear-mutation-history
+    runs-on: self-hosted
+    steps:
+      - uses: ./.github/actions/runLUnitGCLI
+        with:
+          project-path: "source\\project.lvproj"
+  build-exe:
+    needs: test
     runs-on: self-hosted
     steps:
       - name: Get version
@@ -79,45 +78,45 @@ jobs:
         uses: ./.github/actions/releaseFile
         with:
           file-path: "${{ needs.build-pkg.outputs.nipkg-path }}"
-  # build-vip:
-  #   needs: build-exe
-  #   runs-on: self-hosted
-  #   outputs:
-  #     vip-path: ${{ steps.build-vip.outputs.vip-path }}
-  #   steps:
-  #     - name: Get version
-  #       id: get_version
-  #       uses: ./.github/actions/getVersion
-  #     - name: Build VIP
-  #       id: build-vip
-  #       uses: ./.github/actions/buildVIPackageGCLI
-  #       with:
-  #         vipb-path: "source\\vipm.vipb"
-  #         pkg-version: "${{ steps.get_version.outputs.version }}"
-  # release-vip:
-  #   needs: build-vip
-  #   runs-on: self-hosted
-  #   steps:
-  #     - run: 'echo "${{ needs.build-vip.outputs.vip-path }}"'
-  #       shell: powershell
-  #     - name: Release VIP
-  #       uses: ./.github/actions/releaseFile
-  #       with:
-  #         file-path: "${{ needs.build-vip.outputs.vip-path }}"
-  # docs:
-  # needs: checkout
-  # runs-on: self-hosted
-  # steps:
-  #   - name: Build MKDocs
-  #     if: startsWith(github.ref, 'refs/tags/')
-  #     uses: ./.github/actions/buildDocs
-  #     with:
-  #         project-title: "Docs Sandbox"
-  #         author: "Anton Sundqvist"
-  #         initial-release: "2025"
-  #   - name: Deploy GHPages
-  #     if: startsWith(github.ref, 'refs/tags/')
-  #     run: |
-  #       git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-  #       python -m mkdocs gh-deploy --force
-  #     shell: powershell
+  build-vip:
+    needs: build-exe
+    runs-on: self-hosted
+    outputs:
+      vip-path: ${{ steps.build-vip.outputs.vip-path }}
+    steps:
+      - name: Get version
+        id: get_version
+        uses: ./.github/actions/getVersion
+      - name: Build VIP
+        id: build-vip
+        uses: ./.github/actions/buildVIPackageGCLI
+        with:
+          vipb-path: "source\\vipm.vipb"
+          pkg-version: "${{ steps.get_version.outputs.version }}"
+  release-vip:
+    needs: build-vip
+    runs-on: self-hosted
+    steps:
+      - run: 'echo "${{ needs.build-vip.outputs.vip-path }}"'
+        shell: powershell
+      - name: Release VIP
+        uses: ./.github/actions/releaseFile
+        with:
+          file-path: "${{ needs.build-vip.outputs.vip-path }}"
+  docs:
+    needs: checkout
+    runs-on: self-hosted
+    steps:
+      - name: Build MKDocs
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: ./.github/actions/buildDocs
+        with:
+            project-title: "Docs Sandbox"
+            author: "Anton Sundqvist"
+            initial-release: "2025"
+      - name: Deploy GHPages
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          python -m mkdocs gh-deploy --force
+        shell: powershell
